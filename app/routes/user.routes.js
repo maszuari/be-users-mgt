@@ -20,4 +20,10 @@ module.exports = function(app) {
       "/api/create-first-admin",
       controller.createFirstAdmin
     );
+
+    app.post(
+      "/api/create-user",
+      [authJwt.verifyToken],
+      controller.createUser
+    )
   };

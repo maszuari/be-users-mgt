@@ -24,6 +24,12 @@ module.exports = function(app) {
     app.post(
       "/api/create-user",
       [authJwt.verifyToken],
-      controller.createUser
-    )
+      controller.createUser,
+    );
+
+    app.post(
+      "/api/create-multiple-users",
+      [authJwt.verifyToken],
+      controller.createMultipleUsers,
+    );
   };

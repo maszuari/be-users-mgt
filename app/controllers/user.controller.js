@@ -77,10 +77,16 @@ var createMultipleUsers = async(req, res)=>{
         }
     });
 
+    noUsers = 20
+    if (req.body.noUsers) {
+        noUsers = req.body.noUsers
+    }
+
     if (role === null){
         res.status(500).send({ message: 'Unable to find registredUser role' });
     }else{
-        for(var i=0 ; i<22 ; i++){
+        var success = 0; 
+        for(var i=1 ; i<=noUsers ; i++){
             var uname = 'user'+i; 
             User.create({
                 username: uname,
@@ -89,9 +95,22 @@ var createMultipleUsers = async(req, res)=>{
                 firstname: 'John'+i,
                 lastname: 'Doe'+i,
                 role_id: role.id
+            }).then(user=>{
+                success++;
             })
             .catch(err => {
                 res.status(500).send({ message: err.message });
+            });
+        }
+    
+        if( success === noUsers) {
+            res.status(200).send({
+                message:"Successfully created all users"
+            });
+        }else{
+            var failed = noUsers - success;
+            res.status(400).send({
+                message:"Successfully created "+success+" users. Failed to create "+failed+" users."
             });
         }
     }
